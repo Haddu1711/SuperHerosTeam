@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'config',
     'rest_framework',
     'rest_framework_simplejwt',
+    'super_hero'
 ]
 
 MIDDLEWARE = [
