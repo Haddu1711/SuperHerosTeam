@@ -22,3 +22,20 @@ export const fetchSuperHerosAction = async ({
     };
   }
 };
+
+export const fetchSuperHeroDetailAction = async ({
+  slug,
+}: {
+  slug: string;
+}) => {
+  try {
+    const res = await api.get(ApiRoutes.HERO.heor_detail(slug));
+
+    return { data: res.data, status: res.status };
+  } catch (error) {
+    return {
+      data: null,
+      error: error as ApiError,
+    };
+  }
+};

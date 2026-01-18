@@ -7,12 +7,12 @@ import { Button } from "../ui/button";
 import Logo from "./logo";
 
 export default function Navbar() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   console.log("USer:::", user);
 
   return (
-    <nav className="z-10 sticky top-0 left-0 right-0 py-2  flex w-full items-center justify-between gap-8 border-b border-gray-200 px-8 shadow bg-white">
+    <nav className="z-10 sticky top-0 left-0 right-0 py-2 bg-accent flex w-full items-center justify-between gap-8 border-b border-gray-200 px-8 shadow ">
       <div className="flex items-center gap-2">
         <Logo />
       </div>
@@ -32,7 +32,9 @@ export default function Navbar() {
         )}
       </section>
       <div className="items-end">
-        {!!user ? (
+        {loading ? (
+          <></>
+        ) : !!user ? (
           <LogoutButton />
         ) : (
           <div className="flex flex-row gap-4">
