@@ -23,7 +23,7 @@ export default function Navbar() {
         {!!user && (
           <>
             <div>
-              <Link href={""}>Fav Heros</Link>
+              <Link href={paths.FAV.fav_list}>Fav Heros</Link>
             </div>
             <div>
               <Link href={""}>Teams Gen</Link>

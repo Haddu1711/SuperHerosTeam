@@ -8,6 +8,9 @@ export const paths = {
     main: "/super-heros",
     heor_detail: (slug: string) => `/super-heros/${slug}`,
   },
+  FAV: {
+    fav_list: "/super-heros/favorites/",
+  },
 };
 
 export const ApiRoutes = {

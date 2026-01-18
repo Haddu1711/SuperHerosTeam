@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { login } from "@/lib/auth/auth";
 
@@ -24,6 +24,8 @@ type FormData = {
 
 const LoginPage = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next");
   const { register, handleSubmit } = useForm<FormData>();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
@@ -51,7 +53,7 @@ const LoginPage = () => {
       }
       void setSessionUser();
       toast.success("Login successful!");
-      router.push(paths.HOME);
+      router.push(next ?? paths.HOME);
     } catch {
       toast.error("Login failed", {
         description: "Something went wrong! Please try again.",
