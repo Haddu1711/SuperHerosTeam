@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import RegisterSerializer
@@ -17,3 +17,14 @@ class RegisterView(APIView):
                 status=status.HTTP_201_CREATED,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MyUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({
+            "id": request.user.id,
+            "username": request.user.username,
+            "email": request.user.email
+        }, status=status.HTTP_200_OK)
