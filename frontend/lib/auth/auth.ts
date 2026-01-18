@@ -44,3 +44,15 @@ export async function register(
 export function logout() {
   Cookies.remove("access_token");
 }
+
+export const getSessionUser = async () => {
+  try {
+    const res = await api.get(ApiRoutes.AUTH.meUser);
+    return { data: res.data, status: res.status };
+  } catch (error) {
+    return {
+      data: null,
+      error: error as ApiError,
+    };
+  }
+};

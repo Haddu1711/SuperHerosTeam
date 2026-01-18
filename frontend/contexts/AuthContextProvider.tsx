@@ -1,10 +1,8 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
-import { api } from "@/lib/api";
-import { logout } from "@/lib/auth/auth";
+import { getSessionUser, logout } from "@/lib/auth/auth";
 import { User } from "@/types/auth/auth-user";
-import { ApiRoutes } from "@/constants/routes";
+import { createContext, useContext, useEffect, useState } from "react";
 
 type AuthContextType = {
   user: User | null;
@@ -26,7 +24,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchSessionUser = async () => {
     try {
-      const res = await api.get(ApiRoutes.AUTH.meUser);
+      const res = await getSessionUser();
       setUser(res.data);
     } catch {
       setUser(null);

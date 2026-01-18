@@ -11,8 +11,9 @@ const HeroGridList = ({ heros }: { heros: SuperHero[] }) => {
       </div>
     );
   }
+  
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {heros.map((hero) => (
         <div key={hero.id} className="border rounded-lg p-4">
           {hero.image_url && (
