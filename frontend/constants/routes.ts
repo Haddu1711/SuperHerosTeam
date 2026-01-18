@@ -5,3 +5,11 @@ export const paths = {
   },
   HOME: "/",
 };
+
+export const ApiRoutes = {
+  AUTH: {
+    login: "/auth/login/",
+    register: "/auth/register/",
+    meUser: "/auth/me/",
+  },
+};

@@ -13,24 +13,49 @@ import { paths } from "@/constants/routes";
 import Link from "next/link";
 import { toast } from "sonner";
 import Logo from "@/components/app/logo";
+import { ApiResponse, FieldErrors } from "@/types/api";
+import { Label } from "@/components/ui/label";
+
+type FormData = {
+  username: string;
+  email: string;
+  password: string;
+};
 
 const RegisterPage = () => {
   const router = useRouter();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<FormData>();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState<FieldErrors>({});
+  const [globalError, setGlobalError] = useState<string | null>(null);
 
   const onSubmit = async (data: any) => {
     setLoading(true);
-    setError("");
+    setErrors({});
 
     try {
-      const res = await registerUser(data.username, data.email, data.password);
-      if (res.status === 201) {
-        toast.success("Registration successful!");
-        router.push("/login");
+      const res: ApiResponse = await registerUser(
+        data.username,
+        data.email,
+        data.password,
+      );
+
+      if (res.error) {
+        if (res.error.fieldErrors) {
+          if ("detail" in res.error.fieldErrors) {
+            toast.error(res.error.fieldErrors.detail);
+          } else {
+            setErrors(res.error.fieldErrors ?? {});
+          }
+        } else {
+          setGlobalError(res.error.message ?? "");
+        }
+        setLoading(false);
+        return;
       }
-    } catch {
+      toast.success("Registration successful!");
+      router.push(paths.AUTH.LOGIN);
+    } catch (error) {
       toast.error("Registration failed", {
         description: "Something went wrong! Please try again.",
       });
@@ -48,27 +73,35 @@ const RegisterPage = () => {
         <CardHeader className="text-2xl font-medium">Register</CardHeader>
 
         <CardContent className="flex flex-col gap-4">
+          {globalError && <p className="text-sm text-red-500">{globalError}</p>}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <Input
-              placeholder="Username"
-              disabled={loading}
-              {...register("username")}
-            />
+            <div className="space-y-1">
+              <Label>Username</Label>
+              <Input disabled={loading} {...register("username")} />
+              {errors.username && (
+                <p className="text-xs text-red-500">{errors.username[0]}</p>
+              )}
+            </div>
 
-            <Input
-              placeholder="Email"
-              disabled={loading}
-              {...register("email")}
-            />
+            <div className="space-y-1">
+              <Label>Email</Label>
+              <Input disabled={loading} {...register("email")} />
+              {errors.email && (
+                <p className="text-xs text-red-500">{errors.email[0]}</p>
+              )}
+            </div>
 
-            <Input
-              type="password"
-              placeholder="Password"
-              disabled={loading}
-              {...register("password")}
-            />
-
-            {error && <p className="text-sm text-red-500">{error}</p>}
+            <div className="space-y-1">
+              <Label>Password</Label>
+              <Input
+                type="password"
+                disabled={loading}
+                {...register("password")}
+              />
+              {errors.password && (
+                <p className="text-xs text-red-500">{errors.password[0]}</p>
+              )}
+            </div>
 
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? (
