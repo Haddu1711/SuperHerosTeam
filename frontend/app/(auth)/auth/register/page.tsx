@@ -29,7 +29,7 @@ const RegisterPage = () => {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [globalError, setGlobalError] = useState<string | null>(null);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: FormData) => {
     setLoading(true);
     setErrors({});
 
@@ -55,7 +55,7 @@ const RegisterPage = () => {
       }
       toast.success("Registration successful!");
       router.push(paths.AUTH.LOGIN);
-    } catch (error) {
+    } catch {
       toast.error("Registration failed", {
         description: "Something went wrong! Please try again.",
       });

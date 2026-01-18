@@ -15,6 +15,7 @@ import Logo from "@/components/app/logo";
 import { Label } from "@/components/ui/label";
 import { ApiResponse, FieldErrors } from "@/types/api";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContextProvider";
 
 type FormData = {
   username: string;
@@ -27,8 +28,9 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [globalError, setGlobalError] = useState<string | null>(null);
+  const { setSessionUser } = useAuth();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: FormData) => {
     setLoading(true);
     setErrors({});
 
@@ -47,6 +49,7 @@ const LoginPage = () => {
         setLoading(false);
         return;
       }
+      void setSessionUser();
       toast.success("Login successful!");
       router.push(paths.HOME);
     } catch {
@@ -101,7 +104,7 @@ const LoginPage = () => {
             </Button>
           </form>
           <div className="flex justify-center items-center w-full text-sm">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link href={paths.AUTH.REGISTER}>
               <Button variant="link" className="cursor-pointer">
                 Register here

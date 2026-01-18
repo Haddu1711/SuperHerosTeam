@@ -4,6 +4,10 @@ export const paths = {
     REGISTER: "/auth/register",
   },
   HOME: "/",
+  HERO: {
+    main: "/super-heros",
+    heor_detail: (slug: string) => `/super-heros/${slug}`,
+  },
 };
 
 export const ApiRoutes = {
@@ -11,5 +15,9 @@ export const ApiRoutes = {
     login: "/auth/login/",
     register: "/auth/register/",
     meUser: "/auth/me/",
+  },
+  HERO: {
+    hero_list: "/hero/",
+    heor_detail: (slug: string) => `/hero/${slug}/`,
   },
 };
