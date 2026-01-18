@@ -53,7 +53,6 @@ export function FavoriteButton({ heroId, isDefaultFav }: Props) {
 
       if (isFav) {
         const res = await removeFavHeroUserAction({ heroId });
-        console.log("RESPOMSE::", res);
         if (res.error) {
           toast.error(
             "Failed to remove this superhero from your favorites. Please try again.",
@@ -64,7 +63,6 @@ export function FavoriteButton({ heroId, isDefaultFav }: Props) {
         }
       } else {
         const res = await setFavHeroUserAction({ heroId });
-        console.log("RESPOMSE::", res);
         if (res.error) {
           toast.error(
             "Failed to add this superhero to your favorites. Please try again.",
