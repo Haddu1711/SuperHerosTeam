@@ -1,5 +1,9 @@
 from django.db import models
 from django.utils.text import slugify
+from django.conf import settings
+
+User = settings.AUTH_USER_MODEL
+
 
 # Create your models here.
 
@@ -32,3 +36,26 @@ class SuperHero(models.Model):
         if not self.slug and self.name:
             self.slug = f"{slugify(self.name)}-{self.id}"
         super().save(*args, **kwargs)
+
+
+class FavoriteHero(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="favorite_heroes",
+    )
+    hero = models.ForeignKey(
+        SuperHero,
+        on_delete=models.CASCADE,
+        related_name="favorited_by",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("user", "hero")
+        indexes = [
+            models.Index(fields=["user", "hero"]),
+        ]
+
+    def __str__(self):
+        return f"{self.user} → {self.hero.name}"

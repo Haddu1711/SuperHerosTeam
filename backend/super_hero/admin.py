@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SuperHero
+from .models import SuperHero, FavoriteHero
 
 # Register your models here.
 
@@ -33,3 +33,11 @@ class SuperHeroAdmin(admin.ModelAdmin):
             "fields": ("connections",)
         }),
     )
+
+
+@admin.register(FavoriteHero)
+class FavoriteHeroAdmin(admin.ModelAdmin):
+    list_display = ("user", "hero", "created_at")
+    search_fields = ("user__username", "hero__name")
+    ordering = ("-created_at",)
+    list_filter = ("created_at",)
