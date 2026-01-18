@@ -21,7 +21,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from users.views import RegisterView
+from users.views import RegisterView, MyUserView
 
 #  Admin Configuration
 admin.site.site_header = "SuperHero Admin"
@@ -35,6 +35,7 @@ urlpatterns = [
     path("api/auth/login/", TokenObtainPairView.as_view(), name="token_login"),
     path("api/auth/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/auth/register/", RegisterView.as_view(), name="register"),
+    path("api/auth/me/", MyUserView.as_view(), name="my-user"),
 
     # SuperHero URLs
     path("api/hero/", include("super_hero.urls")),
