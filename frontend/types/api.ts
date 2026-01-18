@@ -8,6 +8,7 @@ export type ApiError = {
 
 export type ApiResponse<T = unknown> = {
   data: T | null;
+  status?: number;
   message?: string;
   error?: ApiError;
 };
