@@ -28,5 +28,13 @@ services:
       - db
     restart: always
 
+  ollama:
+    image: ollama/ollama:latest
+    container_name: superhero_ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
 volumes:
   postgres_data:
+  ollama_data:
