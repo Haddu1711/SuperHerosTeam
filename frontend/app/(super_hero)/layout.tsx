@@ -3,5 +3,5 @@ export default function SuperHeroLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div>{children}</div>;
+  return <div className="max-w-6xl mx-auto p-6 space-y-6">{children}</div>;
 }

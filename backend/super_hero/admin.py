@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import SuperHero, FavoriteHero
+
+from .models import FavoriteHero, SuperHero, Team, TeamGenerationJob, TeamHero
 
 # Register your models here.
 
@@ -41,3 +42,19 @@ class FavoriteHeroAdmin(admin.ModelAdmin):
     search_fields = ("user__username", "hero__name")
     ordering = ("-created_at",)
     list_filter = ("created_at",)
+
+
+@admin.register(Team)
+class RecommendedTeamAdmin(admin.ModelAdmin):
+    list_display = ("name", "user", "team_type", "created_at",
+                    "description", "score", "status")
+
+
+@admin.register(TeamHero)
+class RecommendedTeamHeroAdmin(admin.ModelAdmin):
+    list_display = ("team", "hero")
+
+
+@admin.register(TeamGenerationJob)
+class TeamGenerationJobAdmin(admin.ModelAdmin):
+    list_display = ("user", "status", "error")

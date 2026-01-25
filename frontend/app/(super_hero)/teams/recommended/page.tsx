@@ -9,42 +9,36 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { paths } from "@/constants/routes";
-import { fetchUserFavSuperHeroListAction } from "@/lib/favorite-hero/favorite-actions";
+import { PAGE_SIZE } from "@/constants/utils";
+import { fetchRecommendedTeams } from "@/lib/teams/recommend";
 import { User } from "@/types/auth/auth-user";
-import { SuperHeroListData } from "@/types/heros/super-hero";
-import { redirect } from "next/navigation";
-import HeroGridList from "../../_components/hero-grid-list";
+import { RecommendedTeamListData, TeamStatus } from "@/types/teams/team";
+import TeamList from "../_components/team-list";
 
-const PAGE_SIZE = Number(process.env.PAGE_SIZE ?? 30);
-
-export default async function FavoriteHeroPage({
+export default async function RecommendedTeamsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; status?: string }>;
 }) {
-  const { page } = await searchParams;
+  const { page, status: filterStatus } = await searchParams;
   const currentPage = Number(page ?? 1);
-
   const sessionRes = await getServerSideSessionUser();
   const sessionResData = sessionRes.data as User | null;
 
   if (!sessionResData) {
-    return <LoginRequired nextPath={paths.FAV.fav_list} />;
+    return <LoginRequired nextPath={paths.TEAMS.recommended} />;
   }
+  const res = await fetchRecommendedTeams({});
 
-  const res = await fetchUserFavSuperHeroListAction({ page: currentPage });
-  if (res.error) {
-    redirect(paths.HOME);
-  }
-
-  const data: SuperHeroListData = res.data;
-  const totalPages = Math.ceil(data.count / PAGE_SIZE);
+  const data: RecommendedTeamListData = res.data;
+  const totalPages = Math.ceil(data?.count / PAGE_SIZE);
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Favorite Super Heroes</h1>
-
-      <HeroGridList heros={data.results} />
+      <TeamList
+        initialTeams={data?.results}
+        filterStatus={(filterStatus ?? "draft") as TeamStatus}
+      />
 
       {totalPages ? (
         <Pagination>
@@ -53,7 +47,7 @@ export default async function FavoriteHeroPage({
               <PaginationPrevious
                 href={
                   currentPage > 1
-                    ? `${paths.HERO.main}/?page=${currentPage - 1}`
+                    ? `${paths.TEAMS.recommended}/?page=${currentPage - 1}`
                     : undefined
                 }
                 aria-disabled={currentPage === 1}
@@ -70,7 +64,7 @@ export default async function FavoriteHeroPage({
               .map((page) => (
                 <PaginationItem key={page}>
                   <PaginationLink
-                    href={`${paths.HERO.main}/?page=${page}`}
+                    href={`${paths.TEAMS.recommended}/?page=${page}`}
                     isActive={page === currentPage}
                   >
                     {page}
@@ -82,7 +76,7 @@ export default async function FavoriteHeroPage({
               <PaginationNext
                 href={
                   currentPage < totalPages
-                    ? `${paths.HERO.main}/?page=${currentPage + 1}`
+                    ? `${paths.TEAMS.recommended}/?page=${currentPage + 1}`
                     : undefined
                 }
                 aria-disabled={currentPage === totalPages}

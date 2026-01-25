@@ -28,12 +28,29 @@ services:
       - db
     restart: always
 
-  ollama:
-    image: ollama/ollama:latest
-    container_name: superhero_ollama
-    volumes:
-      - ollama_data:/root/.ollama
-    restart: unless-stopped
+
+  redis:
+    image: redis:7
+    container_name: superhero_redis
+    ports:
+      - "6379:6379"
+    restart: always
+    depends_on:
+      - db
+
+  celery_worker:
+    restart: always
+    container_name: superhero_celery_worker
+    command: celery -A config worker -l info
+    build: ./backend
+    depends_on:
+      - redis
+      - db
+    env_file:
+      - .env
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
 
 volumes:
   postgres_data:

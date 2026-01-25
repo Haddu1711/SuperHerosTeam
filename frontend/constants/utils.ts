@@ -1,0 +1,1 @@
+export const PAGE_SIZE = Number(process.env.PAGE_SIZE ?? 30);

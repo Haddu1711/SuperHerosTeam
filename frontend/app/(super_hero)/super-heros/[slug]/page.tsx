@@ -20,11 +20,14 @@ const HeroDetailPage = async ({
   }
 
   const res = await fetchSuperHeroDetailAction({ slug });
+  if (res.error) {
+    return notFound();
+  }
 
   const hero: SuperHeroDetailDataType = res.data;
 
   return (
-    <div className="max-w-5xl mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       <div className="flex gap-6 flex-col lg:flex-row">
         {hero.image_url && (
           <Image
