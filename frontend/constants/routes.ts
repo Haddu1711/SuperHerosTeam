@@ -11,6 +11,10 @@ export const paths = {
   FAV: {
     fav_list: "/super-heros/favorites/",
   },
+  TEAMS: {
+    recommended: "/teams/recommended/",
+    team_detail: (id: number) => `/teams/${id}`,
+  },
 };
 
 export const ApiRoutes = {
@@ -26,5 +30,12 @@ export const ApiRoutes = {
   FAV: {
     fav_list: "/hero/favorites/all/",
     fav_action: (heroId: number) => `/hero/${heroId}/favorite/`,
+  },
+  RECOMMENDED_TEAM: {
+    createRecommendTeams: "/hero/teams/create-recommend/",
+    job_status: (jobId: number) => `/hero/teams/recommend/status/${jobId}/`,
+    teamList: "/hero/teams/all/",
+    teamDetail: (id: number) => `/hero/teams/detail/${id}/`,
+    teamUpdateDetail: (id: number) => `/hero/teams/${id}/update/`,
   },
 };
