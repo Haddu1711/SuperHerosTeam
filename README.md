@@ -18,6 +18,18 @@ The entire stack is containerized using **Docker** for easy local setup.
 - View all favourite superheroes
 - Favourite status embedded directly in hero APIs
 - Django Admin panel for editing hero data
+- Team Recommendation based on different parameters
+    * Based on Powers
+    * Based on Balanced Team
+    * Based on Random Sampling
+    * Based on Favorite SuperHero Listing
+- Recommended Team Approve/Remove Action
+- Manually Update the Details of Team name, Description, and Explanation
+- Team Listing with Filters
+    * Filter by Recommended team
+    * Filter by Approved team
+    * Filter by Removed team
+
 
 ---
 
@@ -44,6 +56,11 @@ The entire stack is containerized using **Docker** for easy local setup.
 
 - **Docker**
 - **Docker Compose**
+
+### Background services
+
+- **Celery**
+- **Redis**
 
 ---
 
@@ -92,6 +109,17 @@ SUPERHERO_API_TOKEN=<superhero_api_key>
 
 # Pagination Config
 PAGE_SIZE=<page-size:number>
+
+# Team Config
+TEAM_SIZE=number
+
+# LLM config
+OLLAMA_URL=<ollama_url>
+OLLAMA_MODEL=<ollama_model_name>
+
+# Celery Config
+CELERY_BROKER_URL=<broker_url>
+CELERY_RESULT_BACKEND=<broker_url>
 ```
 
 Setup a `.env.local` file inside frontend directory:
