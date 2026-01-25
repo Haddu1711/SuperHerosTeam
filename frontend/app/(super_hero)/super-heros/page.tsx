@@ -22,7 +22,7 @@ export default async function HeroesPage({
   const res = await fetchSuperHerosAction({ page: currentPage });
 
   const data: SuperHeroListData = res.data;
-  const totalPages = Math.ceil(data.count / PAGE_SIZE);
+  const totalPages = Math.ceil(data?.count / PAGE_SIZE);
 
   return (
     <div className="space-y-6">

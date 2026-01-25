@@ -20,6 +20,9 @@ const HeroDetailPage = async ({
   }
 
   const res = await fetchSuperHeroDetailAction({ slug });
+  if (res.error) {
+    return notFound();
+  }
 
   const hero: SuperHeroDetailDataType = res.data;
 
