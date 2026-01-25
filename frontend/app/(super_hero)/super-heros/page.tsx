@@ -10,8 +10,7 @@ import { paths } from "@/constants/routes";
 import { fetchSuperHerosAction } from "@/lib/heros/super-heros";
 import { SuperHeroListData } from "@/types/heros/super-hero";
 import HeroGridList from "../_components/hero-grid-list";
-
-const PAGE_SIZE = Number(process.env.PAGE_SIZE ?? 30);
+import { PAGE_SIZE } from "@/constants/utils";
 
 export default async function HeroesPage({
   searchParams,
@@ -26,8 +25,8 @@ export default async function HeroesPage({
   const totalPages = Math.ceil(data.count / PAGE_SIZE);
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-bold text-center">Super Heroes</h1>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold">Super Heroes</h1>
 
       <HeroGridList heros={data.results} />
 

@@ -41,54 +41,58 @@ export default async function FavoriteHeroPage({
   const totalPages = Math.ceil(data.count / PAGE_SIZE);
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-bold text-center">Favorite Super Heroes</h1>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold">Favorite Super Heroes</h1>
 
       <HeroGridList heros={data.results} />
 
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              href={
-                currentPage > 1
-                  ? `${paths.HERO.main}/?page=${currentPage - 1}`
-                  : undefined
-              }
-              aria-disabled={currentPage === 1}
-            />
-          </PaginationItem>
+      {totalPages ? (
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href={
+                  currentPage > 1
+                    ? `${paths.HERO.main}/?page=${currentPage - 1}`
+                    : undefined
+                }
+                aria-disabled={currentPage === 1}
+              />
+            </PaginationItem>
 
-          {Array.from({ length: totalPages }, (_, i) => i + 1)
-            .filter(
-              (page) =>
-                page === 1 ||
-                page === totalPages ||
-                Math.abs(page - currentPage) <= 1,
-            )
-            .map((page) => (
-              <PaginationItem key={page}>
-                <PaginationLink
-                  href={`${paths.HERO.main}/?page=${page}`}
-                  isActive={page === currentPage}
-                >
-                  {page}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter(
+                (page) =>
+                  page === 1 ||
+                  page === totalPages ||
+                  Math.abs(page - currentPage) <= 1,
+              )
+              .map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    href={`${paths.HERO.main}/?page=${page}`}
+                    isActive={page === currentPage}
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
 
-          <PaginationItem>
-            <PaginationNext
-              href={
-                currentPage < totalPages
-                  ? `${paths.HERO.main}/?page=${currentPage + 1}`
-                  : undefined
-              }
-              aria-disabled={currentPage === totalPages}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+            <PaginationItem>
+              <PaginationNext
+                href={
+                  currentPage < totalPages
+                    ? `${paths.HERO.main}/?page=${currentPage + 1}`
+                    : undefined
+                }
+                aria-disabled={currentPage === totalPages}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
