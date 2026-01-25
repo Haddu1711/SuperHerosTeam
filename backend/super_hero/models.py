@@ -59,3 +59,104 @@ class FavoriteHero(models.Model):
 
     def __str__(self):
         return f"{self.user} → {self.hero.name}"
+
+
+class Team(models.Model):
+    TEAM_TYPE_CHOICES = (
+        ("balanced", "Balanced"),
+        ("power", "Power Based"),
+        ("random", "Random"),
+        ("favorites", "Favorites Based"),
+    )
+
+    STATUS_CHOICES = (
+        ("draft", "Draft"),
+        ("approved", "Approved"),
+        ("rejected", "Rejected"),
+    )
+
+    STRENGTH_TYPE_CHOICES = (
+        ("strong", "Strong"), ("weak", "Weak"), ("average", "Average"),
+    )
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="teams",
+    )
+
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+
+    team_type = models.CharField(max_length=20, choices=TEAM_TYPE_CHOICES)
+    power_category = models.CharField(
+        max_length=20, null=True, blank=True)
+    team_strength = models.CharField(
+        max_length=20, null=True, blank=True, choices=STRENGTH_TYPE_CHOICES)
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="draft",
+    )
+
+    is_public = models.BooleanField(default=False)
+    score = models.IntegerField(default=0)
+
+    explanation = models.TextField(blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.status})"
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = f"{self.team_type.capitalize()} Team"
+        super().save(*args, **kwargs)
+
+
+class TeamHero(models.Model):
+    team = models.ForeignKey(
+        Team,
+        on_delete=models.CASCADE,
+        related_name="members",
+    )
+    hero = models.ForeignKey(
+        SuperHero,
+        on_delete=models.CASCADE,
+    )
+
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("team", "hero")
+
+    def __str__(self):
+        return f"{self.hero.name} → {self.team.name}"
+
+
+class TeamGenerationJob(models.Model):
+    STATUS_CHOICES = (
+        ("pending", "Pending"),
+        ("running", "Running"),
+        ("completed", "Completed"),
+        ("failed", "Failed"),
+    )
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="pending",
+    )
+    error = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Job {self.id} - {self.user} - {self.status}"
